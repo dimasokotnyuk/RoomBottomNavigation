@@ -1,7 +1,6 @@
 package com.example.roombottomnavigation.room
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "student_table")

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_students.*
 import kotlinx.android.synthetic.main.item_student.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FragmentStudentCallback {
 
     var dbTest: AppDatabase? = null
 
@@ -29,35 +29,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        if (savedInstanceState == null) {
+            replaceFragment(FragmentStudent.newInstance(), false)
+        }
         dbTest = AppDatabase.getDataBase(this)
 
         initializationDao()
         insertData()
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.page_1 -> {
-                    replaceFragment(FragmentStudent.newInstance(), false)
-                    true
-                }
-                R.id.page_2->{
-                    replaceFragment(FragmentGroup.newInstance(), false)
-                    true
-                }
-                R.id.page_3->{
-                    replaceFragment(FragmentFaculty.newInstance(), false)
-                    true
-                }
-                R.id.page_4->{
-                    replaceFragment(FragmentUniversity.newInstance(), false)
-                    true
-                }
-                else -> false
-            }
+            replaceFragment(when (item.itemId) {
+                R.id.page_1 -> FragmentStudent.newInstance()
+                R.id.page_2-> FragmentGroup.newInstance()
+                R.id.page_3-> FragmentFaculty.newInstance()
+                else -> FragmentUniversity.newInstance()
+            }, false)
+            true
         }
     }
 
+    override fun onUserClicked(item: Student) {
+        replaceFragment(FragmentNewName.newInstance(), true)
+    }
 
     private fun generateStudents() {
         daoStudent?.deleteAllStudents()
@@ -129,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                     container.id,
                     fragment
                 )
+                if (isAddToBackStack) addToBackStack(fragment::class.simpleName)
             }.commit()
         }
     }
