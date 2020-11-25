@@ -21,16 +21,18 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDataBase(context: Context): AppDatabase? {
+        fun getDataBase(context: Context?): AppDatabase? {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        "myDB"
-                    )
-                        .fallbackToDestructiveMigration()
-                        .build()
+                    if (context != null) {
+                        INSTANCE = Room.databaseBuilder(
+                            context.applicationContext,
+                            AppDatabase::class.java,
+                            "myDB"
+                        )
+                            .fallbackToDestructiveMigration()
+                            .build()
+                    }
                 }
             }
             return INSTANCE

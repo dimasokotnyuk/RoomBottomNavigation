@@ -22,7 +22,7 @@ class ViewHolderStudent(
 
         listItemView.setOnClickListener {
 //            listener.onUserClick(item)
-//            callback(item)
+//            callback(item) // тоже самое  callback.invoke(item)
             callback.invoke(item)
         }
     }

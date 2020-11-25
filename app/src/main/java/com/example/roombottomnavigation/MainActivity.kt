@@ -1,6 +1,7 @@
 package com.example.roombottomnavigation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.roombottomnavigation.fragments.*
@@ -10,8 +11,6 @@ import com.example.roombottomnavigation.room.dao.DaoGroup
 import com.example.roombottomnavigation.room.dao.DaoUniversity
 import com.example.roombottomnavigation.room.dao.StudentDao
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_students.*
-import kotlinx.android.synthetic.main.item_student.*
 
 class MainActivity : AppCompatActivity(), FragmentStudentCallback {
 
@@ -38,18 +37,21 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
         insertData()
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
-            replaceFragment(when (item.itemId) {
-                R.id.page_1 -> FragmentStudent.newInstance()
-                R.id.page_2-> FragmentGroup.newInstance()
-                R.id.page_3-> FragmentFaculty.newInstance()
-                else -> FragmentUniversity.newInstance()
-            }, false)
+            replaceFragment(
+                when (item.itemId) {
+                    R.id.page_1 -> FragmentStudent.newInstance()
+                    R.id.page_2 -> FragmentGroup.newInstance()
+                    R.id.page_3 -> FragmentFaculty.newInstance()
+                    else -> FragmentUniversity.newInstance()
+                }, false
+            )
             true
         }
     }
 
     override fun onUserClicked(item: Student) {
-        replaceFragment(FragmentNewName.newInstance(), true)
+        Log.i("log", item.id.toString())
+        item.id?.let { replaceFragment(FragmentNewName.newInstance(it), true) }
     }
 
     private fun generateStudents() {

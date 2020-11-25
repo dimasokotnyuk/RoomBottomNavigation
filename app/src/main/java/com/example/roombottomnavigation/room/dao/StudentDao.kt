@@ -9,6 +9,9 @@ interface StudentDao {
     @Query("SELECT * FROM student_table")
     fun getAllStudents(): List<Student>
 
+    @Query("UPDATE student_table SET firstName =(:newName) WHERE id=(:newId)")
+    fun updateName(newName: String, newId: Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllStudents(students: List<Student>)
 

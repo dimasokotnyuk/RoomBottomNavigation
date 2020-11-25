@@ -25,7 +25,7 @@ class FragmentStudent : Fragment(R.layout.fragment_students), OnUserClickListene
 
     private val adapterStudent = AdapterStudent(this) { student->
         Log.e("Student", "On student click event ${student.firstName}")
-        callback?.onUserClicked(student)
+            callback?.onUserClicked(student)
     }
 
     private lateinit var students: MutableList<Student>

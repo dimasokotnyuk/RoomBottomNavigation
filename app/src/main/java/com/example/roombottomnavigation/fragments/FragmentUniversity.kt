@@ -6,10 +6,8 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.roombottomnavigation.R
-import com.example.roombottomnavigation.adapters.AdapterGroup
 import com.example.roombottomnavigation.adapters.AdapterUniversity
 import com.example.roombottomnavigation.room.AppDatabase
-import com.example.roombottomnavigation.room.Group
 import com.example.roombottomnavigation.room.University
 import kotlinx.android.synthetic.main.fragment_students.*
 
