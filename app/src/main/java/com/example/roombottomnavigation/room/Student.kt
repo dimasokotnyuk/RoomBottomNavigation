@@ -8,7 +8,7 @@ data class Student(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     var firstName: String?,
     var lastName: String?,
-    var group: String?,
+    var groupId: Int?,
     var faculty: String?,
     var university: String?
 )

@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.roombottomnavigation.fragments.*
 import com.example.roombottomnavigation.room.*
-import com.example.roombottomnavigation.room.dao.DaoFaculty
-import com.example.roombottomnavigation.room.dao.DaoGroup
-import com.example.roombottomnavigation.room.dao.DaoUniversity
-import com.example.roombottomnavigation.room.dao.StudentDao
+import com.example.roombottomnavigation.room.dao.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), FragmentStudentCallback {
 
@@ -24,6 +22,7 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
 
     var daoFaculty: DaoFaculty? = null
 
+    var daoUsers: UserDao? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
         dbTest = AppDatabase.getDataBase(this)
 
         initializationDao()
-        insertData()
+//        insertData()
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             replaceFragment(
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
                 Student(
                     firstName = "Dima$i",
                     lastName = "Sokotnyuk$i",
-                    group = "MT$i",
+                    groupId = Random.nextInt(5) + 1,
                     faculty = "MEHMAT$i",
                     university = "DNU$i"
                 )
@@ -71,12 +70,13 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
 
     private fun generateGroup() {
         daoGroup?.deleteAllGroup()
-        for (i in 1..20) {
+        for (i in 1..5) {
             daoGroup?.insertGroup(
                 Group(
-                    nameGroup = "MT$i",
-                    univeristy = "DNU$i",
-                    faculty = "MEHMAT$i",
+                    i,
+                    "MT$i",
+                    "DNU$i",
+                     "MEHMAT$i",
                 )
             )
         }
@@ -108,12 +108,30 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
         }
     }
 
+    private fun generateUsers() {
+        for (i in 1..20) {
+            daoUsers?.insertUser(
+                User(
+                    i,
+                    "MEHMAT$i",
+                    Address(
+                        "Street $i",
+                        "State $i",
+                        "City $i",
+                        i
+                    )
+                )
+            )
+        }
+    }
+
     fun insertData() {
         Thread {
-            generateStudents()
             generateGroup()
+            generateStudents()
             generateFaculty()
             generateUniversity()
+            generateUsers()
         }.start()
     }
 
@@ -134,6 +152,7 @@ class MainActivity : AppCompatActivity(), FragmentStudentCallback {
         daoGroup = dbTest?.groupDao()
         daoFaculty = dbTest?.facultyDao()
         daoUniversity = dbTest?.universityDao()
+        daoUsers = dbTest?.userDao()
     }
 
 }

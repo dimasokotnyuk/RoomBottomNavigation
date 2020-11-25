@@ -13,6 +13,7 @@ import com.example.roombottomnavigation.interfaces.OnUserClickListener
 import com.example.roombottomnavigation.adapters.AdapterStudent
 import com.example.roombottomnavigation.room.AppDatabase
 import com.example.roombottomnavigation.room.Student
+import com.example.roombottomnavigation.room.StudentWithGroup
 import kotlinx.android.synthetic.main.fragment_students.*
 
 
@@ -23,16 +24,15 @@ class FragmentStudent : Fragment(R.layout.fragment_students), OnUserClickListene
         }
     }
 
-    private val adapterStudent = AdapterStudent(this) { student->
-        Log.e("Student", "On student click event ${student.firstName}")
-            callback?.onUserClicked(student)
+    private val adapterStudent = AdapterStudent(this) { studentWithGroup ->
+        callback?.onUserClicked(studentWithGroup.student)
     }
 
-    private lateinit var students: MutableList<Student>
+    private lateinit var students: MutableList<StudentWithGroup>
 
     private var callback: FragmentStudentCallback? = null
 
-    var handler = Handler(Looper.getMainLooper())
+    private var handler = Handler(Looper.getMainLooper())
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,8 +50,8 @@ class FragmentStudent : Fragment(R.layout.fragment_students), OnUserClickListene
         )
         val dao = AppDatabase.getDataBase(view.context)?.studentDao()
         Thread {
-            students = dao?.getAllStudents() as MutableList<Student>
-            handler.post { adapterStudent.dataStudent = students }
+            students = dao?.getAllStudentsWithGroups() as MutableList<StudentWithGroup>
+            handler.post { adapterStudent.submitList(students) }
         }.start()
     }
 

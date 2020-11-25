@@ -4,18 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.roombottomnavigation.room.dao.DaoFaculty
-import com.example.roombottomnavigation.room.dao.DaoGroup
-import com.example.roombottomnavigation.room.dao.DaoUniversity
-import com.example.roombottomnavigation.room.dao.StudentDao
+import com.example.roombottomnavigation.room.dao.*
 
-@Database(entities = [Student::class,Faculty::class,Group::class,University::class], version = 5, exportSchema = false)
+@Database(
+    entities = [Student::class, Faculty::class, Group::class, University::class, User::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun studentDao(): StudentDao
     abstract fun groupDao(): DaoGroup
     abstract fun facultyDao(): DaoFaculty
     abstract fun universityDao(): DaoUniversity
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
